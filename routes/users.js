@@ -14,6 +14,16 @@ router.get('/', cors.corsWithOptions,authenticate.verifyUser, authenticate.verif
     .catch(err => next(err))
     });
 
+/*Using passport-facebook-token*/
+router.get('/facebook/token', passport.authenticate('facebook-token'), (req, res) => {
+    if (req.user) {
+        const token = authenticate.getToken({_id: req.user._id});
+        res.statusCode = 200;
+        res.setHeader('Content-Type', 'application/json');
+        res.json({success: true, token: token, status: 'You are successfully logged in!'});
+    }
+});    
+
 //New User Signup
 router.post('/signup', cors.corsWithOptions,(req, res) => {
     User.register(
@@ -48,37 +58,6 @@ router.post('/signup', cors.corsWithOptions,(req, res) => {
         }
     );
 });
-
-//New User Signup
-// router.post('/signup', async (req, res) => {
-//     try {
-//         const user = (new User({username: req.body.username}));
-//         const registeredUser = await user.register(user, req.body.password);
-
-//         if (req.body.firstname) {
-//             registeredUser.firstname = req.body.firstname;
-//         }
-//         if (req.body.lastname) {
-//             registeredUser.lastname = req.body.lastname;
-//         }
-
-//         await registeredUser.save();
-
-
-//         req.login(registeredUser, function(err) {
-//             if (err) {
-//                 res.status(500).json({err});
-//                 return;
-//             }
-//             passport.authenticate('local')(req, res, () => {
-//                 res.status(200).json({success: true, status: "Registration Successful!"});
-//             });
-//         });
-//         } catch (err) {
-//         res.status(500).json({err});
-//     }               
-// });
-
 
 //User Login
 router.post('/login', cors.corsWithOptions, passport.authenticate('local', { session: false }), (req, res) => {
