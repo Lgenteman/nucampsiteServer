@@ -7,7 +7,6 @@ const cors = require('./cors');
 
 
 /* GET users listing. */
-router.options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
 router.get('/', cors.corsWithOptions,authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
     User.find()
     .then(users => res.status(200).json(users))
@@ -15,7 +14,7 @@ router.get('/', cors.corsWithOptions,authenticate.verifyUser, authenticate.verif
     });
 
 /*Using passport-facebook-token*/
-router.get('/facebook/token', passport.authenticate('facebook-token'), (req, res) => {
+router.get('/facebook/token', cors.corsWithOptions, passport.authenticate('facebook-token'), (req, res) => {
     if (req.user) {
         const token = authenticate.getToken({_id: req.user._id});
         res.statusCode = 200;

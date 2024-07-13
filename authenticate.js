@@ -44,8 +44,8 @@ exports.verifyAdmin = (req, res, next) => {
   if (req.user.admin) {
     return next();
   } else {
-    const err = new Error('You are not authorized to perform this operation');
-    err.status = 403;
+    const err = new Error('You are not authorized to perform this operation').status(403);
+    // err.status = 403;
     return next(err);
   }
 };
@@ -61,10 +61,13 @@ exports.facebookPassport = passport.use(
         if (!user) {
           return done(null, user);
         } else {
-          user = new User({ username: profile.displayName });
-          user.facebookId = profile.id;
-          user.firstname = profile.name.givenName;
-          user.lastname = profile.name.familyName;
+          user = new User({
+          username: profile.displayName,
+          facebookId: profile.id,
+          firstname: profile.name.givenName,
+          lastname: profile.name.familyName,
+          facebookToken: accessToken
+        });
           user.save((err, user) => {
             if (!user) {
               return done(null, user);

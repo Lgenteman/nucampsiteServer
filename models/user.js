@@ -16,6 +16,9 @@ const userSchema = new Schema({
         default: false
     },
     facebookId: {
+        type: String 
+    },
+    facebookToken: {
         type: String
     }
 });

@@ -51,6 +51,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use(passport.initialize());
+app.use(passport.session());
 
 app.use(express.static(path.join(__dirname, 'public')));
 
