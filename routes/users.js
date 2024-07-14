@@ -4,6 +4,7 @@ const router = express.Router();
 const passport = require('passport');
 const authenticate = require('../authenticate');
 const cors = require('./cors');
+const session = require('express-session');
 
 
 /* GET users listing. */
